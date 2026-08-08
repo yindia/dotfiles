@@ -29,8 +29,10 @@
 	df = diff --color
 	de = diff --color
 	amend = commit --amend
+	hdiff = -c core.pager=\"hunk pager\" diff
+	hshow = -c core.pager=\"hunk pager\" show
 [credential]
-	helper = cache --socket ~/.cache/git-credential-cache/socket
+	helper = osxkeychain
 [diff]
 	algorithm = histogram
 	ignoreSubmodules = dirty
@@ -38,12 +40,14 @@
 	colorMoved = plain
 	mnemonicPrefix = true
 	renames = true
+	tool = hunk
 [core]
 	excludesFile = ~/.config/git/ignore
 	autocrlf = input
 	whitespace = cr-at-eol
 	untrackedCache = true
-	pager = less --quit-if-one-screen
+	pager = hunk pager
+	editor = nvim
 [pager]
 	diff = git-diff-pager
 	df = diff-so-fancy | less --quit-if-one-screen --pattern '^(Date|added|deleted|modified): '
@@ -65,3 +69,17 @@
 	syntax-theme = Solarized (dark)
 
 # vi: ft=gitconfig
+[user]
+	name = Yuvraj
+	email = evalsocket@gmail.com
+	username = tqindia
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[difftool "hunk"]
+	cmd = hunk difftool \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[difftool]
+	prompt = false

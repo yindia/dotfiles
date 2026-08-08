@@ -88,3 +88,13 @@ nmap_leader('tt', require('nvim-tree.api').tree.toggle, 'NvimTree')
 nmap_leader('tm', require('markview').commands.toggle, 'Markdown rendering')
 nmap_leader('tc', require('codecompanion').toggle, 'CodeCompanion chat')
 nmap_leader('td', require('mini.diff').toggle_overlay, 'Diff overlay')
+
+-- claude code
+nmap_leader('aa', vim.cmd.ClaudeCode, 'Toggle Claude Code')
+nmap_leader('af', vim.cmd.ClaudeCodeFocus, 'Focus Claude Code')
+nmap_leader('ab', vim.cmd.ClaudeCodeAdd, 'Add buffer to context')
+xmap_leader('as', vim.cmd.ClaudeCodeSend, 'Send selection')
+nmap_leader('ad', vim.cmd.ClaudeCodeDiffAccept, 'Accept diff')
+nmap_leader('aD', vim.cmd.ClaudeCodeDiffDeny, 'Deny diff')
+nmap_leader('am', vim.cmd.ClaudeCodeSelectModel, 'Select model')
+nmap_leader('as', vim.cmd.ClaudeCodeStatus, 'Status')

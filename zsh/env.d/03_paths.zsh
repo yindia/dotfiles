@@ -1,8 +1,8 @@
 # Add custom functions and completions
 fpath=($ZDOTDIR/fpath $fpath)
-
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # Ensure we have local paths enabled
-path=(/usr/local/bin /usr/local/sbin $path)
+path=(~/.bun/bin /usr/local/bin /usr/local/sbin $path)
 
 if [[ $OSTYPE = darwin* ]]; then
     # Check whether homebrew available under new path

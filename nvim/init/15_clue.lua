@@ -45,11 +45,13 @@ miniclue.setup({
     { mode = 'x', keys = ']' },
   },
   clues = {
+    { mode = 'n', keys = '<Leader>a', desc = '+AI' },
     { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
     { mode = 'n', keys = '<leader>f', desc = '+Find' },
     { mode = 'n', keys = '<Leader>g', desc = '+Git' },
     { mode = 'n', keys = '<leader>l', desc = '+LSP' },
     { mode = 'n', keys = '<leader>t', desc = '+Toggle' },
+    { mode = 'x', keys = '<Leader>a', desc = '+AI' },
     { mode = 'x', keys = '<Leader>g', desc = '+Git' },
     { mode = 'x', keys = '<Leader>l', desc = '+LSP' },
     { mode = 'n', keys = ']b', postkeys = ']' },

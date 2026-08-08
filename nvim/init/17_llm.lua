@@ -23,3 +23,14 @@ require('codecompanion').setup({
     spinner = {},
   },
 })
+
+-- websocket bridge to the claude CLI, terminal provider falls back to the
+-- builtin one since snacks.nvim isn't installed
+require('claudecode').setup({
+  terminal = {
+    provider = 'native',
+  },
+  diff_opts = {
+    layout = 'vertical',
+  },
+})

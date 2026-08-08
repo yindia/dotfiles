@@ -148,6 +148,9 @@
 [submodule "nvim/plugins/reticle"]
 	path = nvim/plugins/reticle
 	url = https://github.com/tummetott/reticle.nvim.git
+[submodule "nvim/plugins/rustaceanvim"]
+	path = nvim/plugins/rustaceanvim
+	url = https://github.com/mrcjkb/rustaceanvim.git
 [submodule "nvim/plugins/schema-companion"]
 	path = nvim/plugins/schema-companion
 	url = https://github.com/cenk1cenk2/schema-companion.nvim.git
@@ -460,3 +463,15 @@
 [submodule "zsh/plugins/z"]
 	path = zsh/plugins/z
 	url = https://github.com/agkozak/zsh-z.git
+[submodule "nvim/plugins/go"]
+	path = nvim/plugins/go
+	url = https://github.com/ray-x/go.nvim.git
+[submodule "nvim/plugins/guihua"]
+	path = nvim/plugins/guihua
+	url = https://github.com/ray-x/guihua.lua.git
+[submodule "nvim/plugins/crates"]
+	path = nvim/plugins/crates
+	url = https://github.com/saecki/crates.nvim.git
+[submodule "nvim/plugins/claudecode"]
+	path = nvim/plugins/claudecode
+	url = https://github.com/coder/claudecode.nvim.git
