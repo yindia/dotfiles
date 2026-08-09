@@ -48,13 +48,20 @@ zf_ln -sfn $SCRIPT_DIR/nvim/plugins $XDG_DATA_HOME/nvim/site/pack/plugins/start
 zf_ln -sfn $SCRIPT_DIR/tmux $XDG_CONFIG_HOME/tmux
 zf_ln -sfn $SCRIPT_DIR/configs/aerospace.toml $XDG_CONFIG_HOME/aerospace/aerospace.toml
 zf_ln -sfn $SCRIPT_DIR/configs/ghostty $XDG_CONFIG_HOME/ghostty/config
-# WezTerm prefers $HOME/.wezterm.lua over this path, so an old copy there will
-# silently shadow this symlink. Deploy renames it out of the way if found.
+# WezTerm resolves its config as $WEZTERM_CONFIG_FILE, then $HOME/.wezterm.lua,
+# then the XDG path. Both file locations are linked, rather than only the XDG
+# one, because WezTerm exports the path it booted with as WEZTERM_CONFIG_FILE
+# into every pane it spawns. Long-lived panes therefore keep resolving
+# $HOME/.wezterm.lua, and deleting it breaks `wezterm` inside those sessions
+# ("Error opening ...: No such file or directory") until a full app restart.
+# A stale regular file there is backed up first, since it would otherwise win
+# over the XDG path and shadow this config with no error to explain it.
 if [[ -f $HOME/.wezterm.lua && ! -L $HOME/.wezterm.lua ]]; then
-    print "  ...found legacy ~/.wezterm.lua, which overrides the XDG path, renaming to ~/.wezterm.lua.bak"
+    print "  ...found legacy ~/.wezterm.lua, backing up to ~/.wezterm.lua.bak"
     zf_mv $HOME/.wezterm.lua $HOME/.wezterm.lua.bak
 fi
 zf_ln -sfn $SCRIPT_DIR/configs/wezterm.lua $XDG_CONFIG_HOME/wezterm/wezterm.lua
+zf_ln -sfn $SCRIPT_DIR/configs/wezterm.lua $HOME/.wezterm.lua
 zf_ln -sfn $SCRIPT_DIR/configs/gitconfig $XDG_CONFIG_HOME/git/config
 zf_ln -sfn $SCRIPT_DIR/configs/gitattributes $XDG_CONFIG_HOME/git/attributes
 zf_ln -sfn $SCRIPT_DIR/configs/gitignore $XDG_CONFIG_HOME/git/ignore

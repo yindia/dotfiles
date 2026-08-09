@@ -37,7 +37,8 @@ Specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest
 and organize my dotfiles in a way that they don't clutter the `$HOME`
 directory. I have reduced the files required in `$HOME` to a single
 `.zshenv`; everything else goes under standard XDG paths or is launched via
-aliases. Additionally, if you have root permissions, you can install dotfiles
+aliases. The one exception in this fork is `~/.wezterm.lua`, a symlink back
+into the repository — see the [WezTerm](configs/wezterm.lua) note below. Additionally, if you have root permissions, you can install dotfiles
 with [zero home presence](#zero-home-presence).
 
 ## Features
@@ -60,7 +61,9 @@ with [zero home presence](#zero-home-presence).
   * [Git](configs/gitconfig)
   * [htop](configs/htoprc)
   * [Ghostty](configs/ghostty)
-  * [WezTerm](configs/wezterm.lua)
+  * [WezTerm](configs/wezterm.lua) (linked at both the XDG path and
+    `~/.wezterm.lua`, because WezTerm exports the config path it booted with
+    into every pane it spawns)
   * [AeroSpace](configs/aerospace.toml) (macOS only)
 * Handy [utilities](tools), including:
   * [fzf](https://github.com/junegunn/fzf)
