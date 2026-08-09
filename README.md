@@ -1,5 +1,26 @@
 # Zero Home Presence Dotfiles
 
+## Credits
+
+Forked from **[z0rc/dotfiles](https://github.com/z0rc/dotfiles)**.
+
+The XDG layout, the [deployment script](deploy.zsh), the submodule-based plugin
+management, and most of the Zsh, Neovim, and tmux configuration are the
+original author's work. Full credit to [z0rc](https://github.com/z0rc) — this
+fork only layers my own configuration on top.
+
+The upstream repository is kept as the `origin` remote so its changes can be
+pulled in directly:
+
+| Remote | URL | Points at |
+|--------|-----|-----------|
+| `origin` | <https://github.com/z0rc/dotfiles.git> | Upstream source, forked from |
+| `upstream` | <git@github.com:yindia/dotfiles.git> | This fork |
+
+Note that the two remote names are inverted from the usual convention, so a
+bare `git push` targets upstream rather than the fork. Push explicitly with
+`git push upstream main`.
+
 ## License
 
 [WTFPL](COPYING)
