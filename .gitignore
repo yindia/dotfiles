@@ -11,6 +11,15 @@ zsh/rc.d/9[0-9]_*
 zsh/env.d/9[0-9]_*
 zsh/.zlogin
 zsh/.zlogout
+# Generated completion cache. Listing it here is not cosmetic: deploy.zsh runs
+# `git clean -ffd`, and the git hooks run deploy.zsh on every checkout and
+# merge, so anything untracked in this tree gets deleted without warning.
+# `git clean` skips ignored files, so this entry is what keeps it alive.
+zsh/.zcompdump*
+
+# Same reasoning — scratch and tool state that lives in the repo root must be
+# ignored, or the next checkout silently destroys it.
+.omo/
 
 configs/ranger-plugins/__init__.py
 configs/ranger-plugins/__pycache__
