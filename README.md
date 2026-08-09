@@ -60,6 +60,7 @@ with [zero home presence](#zero-home-presence).
   * [Git](configs/gitconfig)
   * [htop](configs/htoprc)
   * [Ghostty](configs/ghostty)
+  * [WezTerm](configs/wezterm.lua)
   * [AeroSpace](configs/aerospace.toml) (macOS only)
 * Handy [utilities](tools), including:
   * [fzf](https://github.com/junegunn/fzf)
