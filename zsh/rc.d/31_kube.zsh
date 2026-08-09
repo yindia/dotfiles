@@ -37,12 +37,13 @@ if (( ${+commands[kubectl]} )); then
             return 1
         }
 
-        # --select-1 skips the prompt when there is only one candidate, --exit-0
-        # when there are none. Both keep the flow from stalling on a list that
-        # offers no actual choice.
+        # Deliberately no --select-1 here or below. Auto-picking a sole
+        # candidate skips the step entirely, so with one kubeconfig the
+        # function would open straight into the context list and look like it
+        # had ignored the first stage. All three prompts always appear.
         local config
         config=$(print -l -- $configs | fzf \
-            --select-1 --exit-0 \
+            --exit-0 \
             --prompt='kubeconfig> ' \
             --preview='kubectl config get-contexts --kubeconfig {} 2>/dev/null || cat {}' \
             --preview-window='right,60%') || return 1
@@ -55,7 +56,7 @@ if (( ${+commands[kubectl]} )); then
 
         local context
         context=$(kubectl config get-contexts -o name | fzf \
-            --select-1 --exit-0 \
+            --exit-0 \
             --prompt='context> ') || return 1
         [[ -n $context ]] || return 1
 
@@ -98,7 +99,7 @@ if (( ${+commands[kubectl]} )); then
 
         local namespace
         namespace=$(print -l -- $namespaces | fzf \
-            --select-1 --exit-0 \
+            --exit-0 \
             --prompt='namespace> ') || return 0
         [[ -n $namespace ]] || return 0
 
