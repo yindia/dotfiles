@@ -192,6 +192,11 @@ to hold several GitHub accounts at once:
 `IdentitiesOnly=yes` is what makes it work — without it the agent offers
 every loaded key and the default one wins.
 
+Keep those key pins in the profiles, never in `local/user`. That file is the
+fallback for every remote that no rule matches — other accounts, other
+forges, plain servers — and `IdentitiesOnly` there would stop their keys from
+being offered at all. Give the default profile a rule of its own instead.
+
 Two caveats. A freshly `git init`ed repository has no remote yet, so it uses
 the default identity until `git remote add` runs. And `gh` has no
 per-directory awareness, so HTTPS remotes authenticate as whichever account

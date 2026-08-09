@@ -91,7 +91,15 @@
 # Caveat: a freshly `git init`ed repo has no remote yet, so it gets the
 # default identity until `git remote add` runs. Re-check with:
 #     git config --show-origin user.email
+# The SSH key pins live in the profiles, never in local/user: that file is the
+# fallback for every other remote, including a third GitHub account and hosts
+# that authenticate with an entirely different key. IdentitiesOnly there would
+# stop those keys from being offered at all.
 [includeIf "hasconfig:remote.*.url:git@github.com:tqindia/**"]
 	path = local/user-tqindia
 [includeIf "hasconfig:remote.*.url:https://github.com/tqindia/**"]
 	path = local/user-tqindia
+[includeIf "hasconfig:remote.*.url:git@github.com:yindia/**"]
+	path = local/user-yindia
+[includeIf "hasconfig:remote.*.url:https://github.com/yindia/**"]
+	path = local/user-yindia
