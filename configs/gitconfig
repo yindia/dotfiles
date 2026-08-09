@@ -69,10 +69,6 @@
 	syntax-theme = Solarized (dark)
 
 # vi: ft=gitconfig
-[user]
-	name = Yuvraj
-	email = evalsocket@gmail.com
-	username = tqindia
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
@@ -83,3 +79,19 @@
 	cmd = hunk difftool \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 [difftool]
 	prompt = false
+
+# Per-profile identity. These must stay at the very bottom: git applies
+# includes in file order, so anything read later overrides the default
+# identity pulled in by `[include] path = local/user` at the top.
+#
+# Matching is on the remote URL rather than the directory, because
+# workspace/tqindia holds at least one repo with a personal remote. Both URL
+# forms are listed since a single repo may be cloned over SSH or HTTPS.
+#
+# Caveat: a freshly `git init`ed repo has no remote yet, so it gets the
+# default identity until `git remote add` runs. Re-check with:
+#     git config --show-origin user.email
+[includeIf "hasconfig:remote.*.url:git@github.com:tqindia/**"]
+	path = local/user-tqindia
+[includeIf "hasconfig:remote.*.url:https://github.com/tqindia/**"]
+	path = local/user-tqindia

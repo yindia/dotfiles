@@ -157,6 +157,51 @@ like this:
 
 You can also add additional configurations in `~/.config/git/local/stuff`.
 
+Neither file is tracked, so no identity is committed to this repository.
+
+#### Multiple Git Profiles
+
+Extra identities live beside it as `~/.config/git/local/user-<profile>`, and
+are selected by the `[includeIf]` rules at the bottom of
+[configs/gitconfig](configs/gitconfig). Those rules must stay last in the
+file: includes apply in read order, so only a later one can override the
+default identity pulled in at the top.
+
+Matching is on the remote URL rather than the working directory, which
+matters when a personal repository is checked out inside a work directory:
+
+```ini
+[includeIf "hasconfig:remote.*.url:git@github.com:acme/**"]
+	path = local/user-acme
+[includeIf "hasconfig:remote.*.url:https://github.com/acme/**"]
+	path = local/user-acme
+```
+
+Both URL forms are needed, since the same repository may be cloned over SSH
+or HTTPS. A profile can also pin its own SSH key, which is the simplest way
+to hold several GitHub accounts at once:
+
+```ini
+[user]
+	email = 12345+acme-user@users.noreply.github.com
+	name = Jane Doe
+[core]
+	sshCommand = ssh -i ~/.ssh/id_acme -o IdentitiesOnly=yes
+```
+
+`IdentitiesOnly=yes` is what makes it work — without it the agent offers
+every loaded key and the default one wins.
+
+Two caveats. A freshly `git init`ed repository has no remote yet, so it uses
+the default identity until `git remote add` runs. And `gh` has no
+per-directory awareness, so HTTPS remotes authenticate as whichever account
+`gh auth switch` last selected, regardless of these rules. Confirm what any
+repository resolved to with:
+
+```sh
+git config --show-origin user.email
+```
+
 ### Zsh Configuration
 
 Note that Zsh configuration skips every global configuration file except
