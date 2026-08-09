@@ -1,0 +1,176 @@
+# AeroSpace config — arrow-key friendly
+# Backup of the previous i3-style config: ~/.config/aerospace/aerospace.toml.bak
+# Docs: https://nikitabobko.github.io/AeroSpace/guide
+
+config-version = 2
+
+start-at-login = true
+
+# JankyBorders — draws a ring around the FOCUSED window. AeroSpace has no
+# built-in focus indicator, which makes alt-arrow focus moves invisible.
+# Installed via: brew install borders
+after-startup-command = [
+    'exec-and-forget /opt/homebrew/bin/borders active_color=0xff7aa2f7 inactive_color=0x00000000 width=6.0 style=round'
+]
+
+# Workspaces are phantom — they exist only while a window lives on them.
+persistent-workspaces = []
+
+# Normalizations ON. They delete pointless single-child containers and stop
+# nested containers sharing an orientation, so the tree always matches what you
+# actually see on screen. The i3 preset turns these off for i3 compatibility;
+# that trade only pays off if you're already an i3 user.
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# Mouse follows focus when the focused monitor changes.
+# Disabled: warping the cursor to the other monitor's centre parks it over
+# whatever window happens to be there, so the next click/scroll lands somewhere
+# you didn't intend. Re-enable by uncommenting if you miss it.
+# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# --- Multi-monitor: pin workspaces to a specific display ---------------------
+# Matched by case-insensitive regex against the monitor NAME (stable), not by
+# position number (which changes if you rearrange displays in System Settings).
+# Each value is a fallback list: first pattern that matches a CONNECTED monitor
+# wins, so when the HP is unplugged everything collapses onto the built-in.
+#   Check names with:  aerospace list-monitors
+[workspace-to-monitor-force-assignment]
+    1  = ['hp m27f', 'built-in']   # external — main work
+    2  = ['hp m27f', 'built-in']
+    3  = ['hp m27f', 'built-in']
+    4  = ['hp m27f', 'built-in']
+    5  = ['hp m27f', 'built-in']
+    6  = 'built-in'                # laptop screen — chat, music, reference
+    7  = 'built-in'
+    8  = 'built-in'
+    9  = 'built-in'
+    10 = 'built-in'
+
+[gaps]
+    inner.horizontal = 8
+    inner.vertical   = 8
+    outer.left       = 8
+    outer.right      = 8
+    outer.top        = 8
+    outer.bottom     = 8
+
+[mode.main.binding]
+    # --- Launch terminal -----------------------------------------------------
+    # New WezTerm window; falls back to launching the app if none is running.
+    alt-enter = '''exec-and-forget /opt/homebrew/bin/wezterm cli spawn --new-window \
+    || open -na /Applications/WezTerm.app'''
+
+    # --- Focus: arrow keys ---------------------------------------------------
+    alt-left  = 'focus --boundaries-action wrap-around-the-workspace left'
+    alt-down  = 'focus --boundaries-action wrap-around-the-workspace down'
+    alt-up    = 'focus --boundaries-action wrap-around-the-workspace up'
+    alt-right = 'focus --boundaries-action wrap-around-the-workspace right'
+
+    # --- Focus: legacy i3 keys (kept so old muscle memory still works) -------
+    alt-j         = 'focus --boundaries-action wrap-around-the-workspace left'
+    alt-k         = 'focus --boundaries-action wrap-around-the-workspace down'
+    alt-l         = 'focus --boundaries-action wrap-around-the-workspace up'
+    alt-semicolon = 'focus --boundaries-action wrap-around-the-workspace right'
+
+    # --- Move window: arrow keys ---------------------------------------------
+    alt-shift-left  = 'move left'
+    alt-shift-down  = 'move down'
+    alt-shift-up    = 'move up'
+    alt-shift-right = 'move right'
+
+    # --- Move window: legacy i3 keys -----------------------------------------
+    alt-shift-j         = 'move left'
+    alt-shift-k         = 'move down'
+    alt-shift-l         = 'move up'
+    alt-shift-semicolon = 'move right'
+
+    # --- Regroup windows -----------------------------------------------------
+    # 'join-with' pulls the focused window into a container with its neighbour
+    # in that direction. The docs recommend it over 'split', which only exists
+    # for i3 compatibility and misbehaves once normalizations are on.
+    alt-shift-h = 'join-with left'
+    alt-shift-n = 'join-with down'
+    alt-shift-p = 'join-with up'
+    alt-shift-o = 'join-with right'
+
+    # Change the CURRENT container's layout (this is the one you'll use)
+    alt-h = 'layout h_tiles'   # arrange side by side  →
+    alt-v = 'layout v_tiles'   # arrange stacked       ↓
+
+    # --- Layout --------------------------------------------------------------
+    alt-f = 'fullscreen'
+
+    alt-s = 'layout v_accordion'              # i3 'stacking'
+    alt-w = 'layout h_accordion'              # i3 'tabbed'
+    alt-e = 'layout tiles horizontal vertical'  # toggle split direction
+
+    alt-shift-space = 'layout floating tiling'  # float / unfloat this window
+
+    # --- Workspaces ----------------------------------------------------------
+    alt-1 = 'workspace 1'
+    alt-2 = 'workspace 2'
+    alt-3 = 'workspace 3'
+    alt-4 = 'workspace 4'
+    alt-5 = 'workspace 5'
+    alt-6 = 'workspace 6'
+    alt-7 = 'workspace 7'
+    alt-8 = 'workspace 8'
+    alt-9 = 'workspace 9'
+    alt-0 = 'workspace 10'
+
+    # --- Send focused window to a workspace ----------------------------------
+    alt-shift-1 = 'move-node-to-workspace 1'
+    alt-shift-2 = 'move-node-to-workspace 2'
+    alt-shift-3 = 'move-node-to-workspace 3'
+    alt-shift-4 = 'move-node-to-workspace 4'
+    alt-shift-5 = 'move-node-to-workspace 5'
+    alt-shift-6 = 'move-node-to-workspace 6'
+    alt-shift-7 = 'move-node-to-workspace 7'
+    alt-shift-8 = 'move-node-to-workspace 8'
+    alt-shift-9 = 'move-node-to-workspace 9'
+    alt-shift-0 = 'move-node-to-workspace 10'
+
+    # Safety net: cycle through every workspace that exists, including any
+    # stray one above 10 that no number key can reach. If a window ever goes
+    # missing, hold these until you find it, then alt-shift-<N> to bring it back.
+    alt-backtick       = 'workspace --wrap-around next'
+    alt-shift-backtick = 'workspace --wrap-around prev'
+
+    # NOTE: alt-tab is deliberately LEFT UNBOUND. Binding it hijacks the
+    # universal app-switcher reflex and teleports you to another workspace,
+    # which reads as "focus randomly jumped". If you want back-and-forth,
+    # use a key you don't already press by habit, e.g.:
+    #   alt-grave = 'workspace-back-and-forth'
+
+    # --- Monitors ------------------------------------------------------------
+    # ctrl-alt-arrows chosen over alt-arrows to avoid clobbering more shortcuts.
+    ctrl-alt-left  = 'focus-monitor --wrap-around left'
+    ctrl-alt-right = 'focus-monitor --wrap-around right'
+
+    # Throw the focused WINDOW to the other monitor and follow it
+    ctrl-alt-shift-left  = 'move-node-to-monitor --wrap-around --focus-follows-window left'
+    ctrl-alt-shift-right = 'move-node-to-monitor --wrap-around --focus-follows-window right'
+    # alt-shift-tab also left unbound — same reason as alt-tab above.
+
+    # NOTE: 'move-workspace-to-monitor' is deliberately NOT bound — it is a
+    # no-op for workspaces that have a force-assignment above, which is all of
+    # them. Move individual windows instead, or edit the assignment table.
+
+    # --- Misc ----------------------------------------------------------------
+    alt-shift-c = 'reload-config'
+    alt-r       = 'mode resize'
+
+[mode.resize.binding]
+    left  = 'resize width -50'
+    right = 'resize width +50'
+    up    = 'resize height -50'
+    down  = 'resize height +50'
+
+    h = 'resize width -50'
+    j = 'resize height +50'
+    k = 'resize height -50'
+    l = 'resize width +50'
+
+    enter = 'mode main'
+    esc   = 'mode main'

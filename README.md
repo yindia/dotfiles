@@ -39,6 +39,7 @@ with [zero home presence](#zero-home-presence).
   * [Git](configs/gitconfig)
   * [htop](configs/htoprc)
   * [Ghostty](configs/ghostty)
+  * [AeroSpace](configs/aerospace.toml) (macOS only)
 * Handy [utilities](tools), including:
   * [fzf](https://github.com/junegunn/fzf)
   * [spark](https://github.com/holman/spark) to draw bar charts right in the console
