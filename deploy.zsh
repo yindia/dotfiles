@@ -81,12 +81,148 @@ zf_ln -sfn $SCRIPT_DIR/gpg/gpg-agent.conf $XDG_CONFIG_HOME/gnupg/gpg-agent.conf
 zf_ln -sfn $SCRIPT_DIR/tools/git-diff-pager $HOME/.local/bin/git-diff-pager
 print "  ...done"
 
+# `git clean -ffd` below deletes everything untracked in this tree, and the git
+# hooks run this script on every checkout and merge. That is harmless for build
+# artifacts, but a skill that was just written and not committed yet would go
+# with it, so stop while it can still be rescued.
+print "Checking for uncommitted Claude Code skills..."
+untracked_skills=$(git ls-files --others --exclude-standard --directory claude/skills)
+if [[ -n $untracked_skills ]]; then
+    print "  ...found uncommitted paths under claude/skills:"
+    for untracked_skill in ${(f)untracked_skills}; do
+        print "       $untracked_skill"
+    done
+    print "  ...\`git clean -ffd\` in this script would delete them without warning."
+    print "     Commit them with \`git add claude/skills\` or move them out, then deploy again."
+    exit 1
+fi
+print "  ...none found"
+
 # Make sure submodules are installed
 print "Syncing submodules..."
 git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
 print "  ...done"
+
+# Link Claude Code skills
+#
+# claude/skills holds one directory per skill, committed directly or added as a
+# submodule, the same way nvim/plugins and zsh/plugins work. claude/skills.conf
+# groups them into profiles, and $CLAUDE_PROFILE picks which profile this
+# machine gets. Only symlinks pointing back into claude/skills are ever created
+# or removed here, so skills installed into ~/.claude/skills by anything else
+# are never touched.
+print "Linking Claude Code skills..."
+claude_profile=${CLAUDE_PROFILE:-default}
+claude_skills_dir=$SCRIPT_DIR/claude/skills
+claude_skills_conf=$SCRIPT_DIR/claude/skills.conf
+claude_skills_target=$HOME/.claude/skills
+
+if [[ $claude_profile == none ]]; then
+    print "  ...CLAUDE_PROFILE=none, skipping"
+elif [[ ! -f $claude_skills_conf ]]; then
+    print "  ...no ${claude_skills_conf:t} found, skipping"
+else
+    # Read the profile sections. A section stays empty rather than absent when
+    # it has no entries, so an intentionally empty profile is distinguishable
+    # from one that was never declared.
+    typeset -A claude_profiles
+    claude_section=""
+    while IFS= read -r claude_line || [[ -n $claude_line ]]; do
+        claude_line=${claude_line%%\#*}
+        claude_line=${claude_line##[[:space:]]#}
+        claude_line=${claude_line%%[[:space:]]#}
+        if [[ -z $claude_line ]]; then
+            continue
+        fi
+        if [[ $claude_line == \[*\] ]]; then
+            claude_section=${claude_line[2,-2]}
+            if (( ! ${+claude_profiles[$claude_section]} )); then
+                claude_profiles[$claude_section]=""
+            fi
+            continue
+        fi
+        if [[ -n $claude_section ]]; then
+            claude_profiles[$claude_section]+="$claude_line"$'\n'
+        fi
+    done < $claude_skills_conf
+
+    # Flatten the selected profile, following @profile includes. The visited
+    # set keeps a profile that includes itself, directly or in a cycle, from
+    # looping forever.
+    claude_queue=($claude_profile)
+    claude_selected=()
+    claude_unknown=()
+    typeset -A claude_visited
+    while (( ${#claude_queue} > 0 )); do
+        claude_current=${claude_queue[1]}
+        claude_queue=(${claude_queue[2,-1]})
+        if (( ${+claude_visited[$claude_current]} )); then
+            continue
+        fi
+        claude_visited[$claude_current]=1
+        if (( ! ${+claude_profiles[$claude_current]} )); then
+            claude_unknown+=($claude_current)
+            continue
+        fi
+        for claude_entry in ${(f)claude_profiles[$claude_current]}; do
+            if [[ -z $claude_entry ]]; then
+                continue
+            elif [[ $claude_entry == @* ]]; then
+                claude_queue+=(${claude_entry#@})
+            else
+                claude_selected+=($claude_entry)
+            fi
+        done
+    done
+    claude_selected=(${(u)claude_selected})
+
+    for claude_current in $claude_unknown; do
+        print "  ...profile \"$claude_current\" is not declared in ${claude_skills_conf:t}, skipping it"
+    done
+
+    zf_mkdir -p $claude_skills_target
+
+    # Retract links this repo made earlier that the current profile no longer
+    # selects, so switching profiles is not additive. Links pointing anywhere
+    # else belong to someone else and are left as they are.
+    for claude_link in $claude_skills_target/*(#qN@); do
+        if [[ $(readlink $claude_link) != $claude_skills_dir/* ]]; then
+            continue
+        fi
+        if (( ${claude_selected[(Ie)${claude_link:t}]} == 0 )); then
+            zf_rm $claude_link
+            print "  ...unlinked \"${claude_link:t}\", no longer in profile \"$claude_profile\""
+        fi
+    done
+
+    claude_linked=0
+    for claude_skill in $claude_selected; do
+        if [[ ! -d $claude_skills_dir/$claude_skill ]]; then
+            print "  ...\"$claude_skill\" is listed in ${claude_skills_conf:t} but absent from claude/skills, skipping"
+            continue
+        fi
+        # Something already sits under this name: a real directory installed by
+        # another tool, or a symlink some other installer made. Overwriting it
+        # would destroy work this repo does not own, so defer and say so. Links
+        # already pointing into claude/skills are ours and get refreshed below.
+        # `-L` is tested separately because `-e` is false for a broken symlink.
+        if [[ -e $claude_skills_target/$claude_skill || -L $claude_skills_target/$claude_skill ]]; then
+            claude_existing=""
+            if [[ -L $claude_skills_target/$claude_skill ]]; then
+                claude_existing=$(readlink $claude_skills_target/$claude_skill)
+            fi
+            if [[ $claude_existing != $claude_skills_dir/* ]]; then
+                print "  ...\"$claude_skill\" already exists in ~/.claude/skills and was not put there by this repo, leaving it alone"
+                continue
+            fi
+        fi
+        zf_ln -sfn $claude_skills_dir/$claude_skill $claude_skills_target/$claude_skill
+        claude_linked=$(( claude_linked + 1 ))
+    done
+    print "  ...done, linked $claude_linked skill(s) for profile \"$claude_profile\""
+fi
 
 print "Compiling zsh plugins..."
 autoload -Uz zrecompile

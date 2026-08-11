@@ -55,6 +55,8 @@ with [zero home presence](#zero-home-presence).
 * Neovim [configuration](nvim/init.lua) and [plugins](nvim/plugins)
 * Tmux [configuration](tmux/tmux.conf) and [plugins](tmux/plugins)
 * Yazi [configuration](yazi/yazi.toml) and [plugins](yazi/plugins)
+* Claude Code [skills](claude/skills), grouped into
+  [profiles](claude/skills.conf) so each machine gets the set it needs
 * Other configurations:
   * [ranger](configs/ranger)
   * [quilt](configs/quiltrc)
@@ -253,6 +255,44 @@ Local configuration can be added to:
 ### Vim Configuration
 
 Add your local configuration to `$DOTFILES/vim/vimrc.local`.
+
+### Claude Code Skills
+
+Skills live in `$DOTFILES/claude/skills`, one directory per skill, the same way
+`nvim/plugins` and `zsh/plugins` work. Add one you wrote yourself:
+
+```sh
+mkdir -p claude/skills/my-skill
+$EDITOR claude/skills/my-skill/SKILL.md
+git add claude/skills/my-skill
+```
+
+Or track one maintained elsewhere:
+
+```sh
+git submodule add https://github.com/user/some-skill.git claude/skills/some-skill
+```
+
+Committing is not optional. `deploy.zsh` runs `git clean -ffd`, so an untracked
+skill directory would be deleted on the next checkout or merge; deploy stops
+with an error if it finds one rather than letting that happen quietly.
+
+Which skills a machine actually gets is decided by the profiles in
+[`claude/skills.conf`](claude/skills.conf), selected with `$CLAUDE_PROFILE`:
+
+```sh
+CLAUDE_PROFILE=work ./deploy.zsh
+```
+
+`$CLAUDE_PROFILE` defaults to `default`, and `none` skips skill linking
+entirely. A profile line starting with `@` pulls in another profile, so
+profiles compose rather than repeat each other. Switching profiles is not
+additive: skills the new profile does not list are unlinked again.
+
+Deploy only ever creates, refreshes, or removes symlinks that point back into
+`claude/skills`. Anything else already in `~/.claude/skills`, whether installed
+by hand or by another tool, is reported and left alone, so this can be adopted
+on a machine that already has skills without disturbing them.
 
 ### Local Paths
 

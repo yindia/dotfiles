@@ -1,0 +1,6 @@
+This file only exists to keep claude/skills/ present in a fresh clone.
+
+Skills dropped in here must be committed (or added as submodules). deploy.zsh
+runs `git clean -ffd`, so an untracked directory in this tree gets deleted on
+the next checkout or merge. deploy.zsh refuses to run if it finds one, rather
+than letting that happen silently.
