@@ -481,3 +481,9 @@
 [submodule "nvim/plugins/markdown-preview.nvim"]
 	path = nvim/plugins/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim.git
+[submodule "nvim/plugins/hunk"]
+	path = nvim/plugins/hunk
+	url = https://github.com/julienvincent/hunk.nvim.git
+[submodule "nvim/plugins/nui"]
+	path = nvim/plugins/nui
+	url = https://github.com/MunifTanjim/nui.nvim.git
