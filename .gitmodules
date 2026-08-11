@@ -475,3 +475,15 @@
 [submodule "nvim/plugins/claudecode"]
 	path = nvim/plugins/claudecode
 	url = https://github.com/coder/claudecode.nvim.git
+[submodule "nvim/plugins/opencode"]
+	path = nvim/plugins/opencode
+	url = https://github.com/nickjvandyke/opencode.nvim.git
+[submodule "nvim/plugins/markdown-preview.nvim"]
+	path = nvim/plugins/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim.git
+[submodule "nvim/plugins/hunk"]
+	path = nvim/plugins/hunk
+	url = https://github.com/julienvincent/hunk.nvim.git
+[submodule "nvim/plugins/nui"]
+	path = nvim/plugins/nui
+	url = https://github.com/MunifTanjim/nui.nvim.git

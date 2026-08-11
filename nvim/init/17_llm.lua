@@ -24,6 +24,12 @@ require('codecompanion').setup({
   },
 })
 
+-- opencode is configured through a global instead of a setup() call; defaults
+-- are kept, so ask()/select() fall back to vim.ui.input and mini.pick, and a
+-- missing server is started with `vsplit term://opencode --port`
+---@type opencode.Opts
+vim.g.opencode_opts = {}
+
 -- websocket bridge to the claude CLI, terminal provider falls back to the
 -- builtin one since snacks.nvim isn't installed
 require('claudecode').setup({

@@ -146,6 +146,28 @@ if (( ${+commands[vim]} )); then
     print "  ...done"
 fi
 
+# markdown-preview.nvim is shipped as a pre-built binary that is downloaded
+# rather than checked in, so it has to be fetched here. Its own installer
+# (`mkdp#util#install()`) is not used because it decides whether to download by
+# running `<binary> --version`, which fails on this release -- it would refetch
+# 50MB on every deploy, and deploy runs from the post-merge/post-checkout
+# hooks. The stamp file below is the version check instead.
+mkdp_dir=$SCRIPT_DIR/nvim/plugins/markdown-preview.nvim
+if [[ -d $mkdp_dir ]]; then
+    print "Installing markdown-preview binary..."
+    mkdp_version=$(grep -m1 '"version"' $mkdp_dir/package.json)
+    mkdp_version=${mkdp_version//[^0-9.]/}
+    if [[ -f $mkdp_dir/app/bin/.version && "$(<$mkdp_dir/app/bin/.version)" == $mkdp_version ]]; then
+        print "  ...v$mkdp_version already present, skipping"
+    elif mkdp_install_output=$($mkdp_dir/app/install.sh v$mkdp_version 2>&1); then
+        print -r -- $mkdp_version > $mkdp_dir/app/bin/.version
+        print "  ...done"
+    else
+        print $mkdp_install_output
+        print "  ...download failed, :MarkdownPreview stays broken until app/install.sh succeeds"
+    fi
+fi
+
 if (( ${+commands[nvim]} )); then
     # Generate nvim help tags
     print "Generating nvim helptags..."

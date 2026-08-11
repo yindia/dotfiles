@@ -68,3 +68,10 @@ require('markview').setup({
     ignore_buftypes = {},
   },
 })
+
+-- browser preview, for what markview can only label with an icon: mermaid,
+-- katex and plantuml blocks are drawn by the bundled js. Configured with
+-- globals since the plugin is vimscript. The default closes the preview when
+-- leaving the markdown buffer, which fights a toggle-driven workflow; the
+-- theme is left alone so the page follows the system light/dark preference
+vim.g.mkdp_auto_close = 0
