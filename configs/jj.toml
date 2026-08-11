@@ -1,0 +1,14 @@
+# Deployed to $XDG_CONFIG_HOME/jj/conf.d/ rather than as config.toml itself.
+# jj loads conf.d after config.toml, so these settings win, while `jj config
+# set --user` keeps writing identity and machine-local tweaks to a file this
+# repo does not manage -- the same split gitconfig uses for `local/user`.
+
+[ui]
+# hunk.nvim (nvim/plugins/hunk) instead of jj's :builtin diff editor. It takes
+# the three directories jj hands it and writes the selected lines to $output.
+diff-editor = ["nvim", "-c", "DiffEditor $left $right $output"]
+# without this jj drops a JJ-INSTRUCTIONS file into the diff, which then shows
+# up as a file to select in the editor's tree
+diff-instructions = false
+
+# vi: ft=toml

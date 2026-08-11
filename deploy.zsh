@@ -20,7 +20,7 @@ XDG_STATE_HOME=$HOME/.local/state
 
 # Create required directories
 print "Creating required directory tree..."
-zf_mkdir -p $XDG_CONFIG_HOME/{aerospace,ghostty,git/local,htop,ranger,gem,tig,gnupg,nvim/{plugin,after},wezterm,yazi}
+zf_mkdir -p $XDG_CONFIG_HOME/{aerospace,ghostty,git/local,htop,jj/conf.d,ranger,gem,tig,gnupg,nvim/{plugin,after},wezterm,yazi}
 zf_mkdir -p $XDG_CACHE_HOME/{vim/{backup,swap,undo},zsh,tig}
 zf_mkdir -p $XDG_DATA_HOME/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
 zf_mkdir -p $XDG_STATE_HOME
@@ -65,6 +65,7 @@ zf_ln -sfn $SCRIPT_DIR/configs/wezterm.lua $HOME/.wezterm.lua
 zf_ln -sfn $SCRIPT_DIR/configs/gitconfig $XDG_CONFIG_HOME/git/config
 zf_ln -sfn $SCRIPT_DIR/configs/gitattributes $XDG_CONFIG_HOME/git/attributes
 zf_ln -sfn $SCRIPT_DIR/configs/gitignore $XDG_CONFIG_HOME/git/ignore
+zf_ln -sfn $SCRIPT_DIR/configs/jj.toml $XDG_CONFIG_HOME/jj/conf.d/dotfiles.toml
 zf_ln -sfn $SCRIPT_DIR/configs/tigrc $XDG_CONFIG_HOME/tig/config
 zf_ln -sfn $SCRIPT_DIR/configs/htoprc $XDG_CONFIG_HOME/htop/htoprc
 zf_ln -sfn $SCRIPT_DIR/configs/ranger $XDG_CONFIG_HOME/ranger/rc.conf

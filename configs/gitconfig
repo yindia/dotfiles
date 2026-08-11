@@ -77,6 +77,12 @@
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [difftool "hunk"]
 	cmd = hunk difftool \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+# hunk.nvim rather than the hunk CLI above, and a separate tool because it
+# diffs directories: reach it with `git difftool -d -t hunknvim`. The paths are
+# unquoted on purpose, since :DiffEditor splits its arguments on whitespace and
+# would keep the quotes as part of the path.
+[difftool "hunknvim"]
+	cmd = nvim -c \"DiffEditor $LOCAL $REMOTE\"
 [difftool]
 	prompt = false
 
