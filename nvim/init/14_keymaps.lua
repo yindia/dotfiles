@@ -98,3 +98,20 @@ nmap_leader('ad', vim.cmd.ClaudeCodeDiffAccept, 'Accept diff')
 nmap_leader('aD', vim.cmd.ClaudeCodeDiffDeny, 'Deny diff')
 nmap_leader('am', vim.cmd.ClaudeCodeSelectModel, 'Select model')
 nmap_leader('as', vim.cmd.ClaudeCodeStatus, 'Status')
+
+-- opencode
+local opencode = require('opencode')
+local opencode_ask = function() opencode.ask('@this: ') end
+local opencode_select = function() opencode.select() end
+local opencode_command = function(name) return function() opencode.command(name) end end
+nmap_leader('oa', opencode_ask, 'Ask about cursor')
+xmap_leader('oa', opencode_ask, 'Ask about selection')
+nmap_leader('op', opencode_select, 'Prompts, commands, servers')
+xmap_leader('op', opencode_select, 'Prompts, commands, servers')
+nmap_leader('on', opencode_command('session.new'), 'New session')
+nmap_leader('oi', opencode_command('session.interrupt'), 'Interrupt session')
+nmap_leader('oc', opencode_command('session.compact'), 'Compact session')
+nmap_leader('ou', opencode_command('session.undo'), 'Undo last edit')
+nmap_leader('oU', opencode_command('session.redo'), 'Redo last edit')
+nmap_leader('ok', opencode_command('session.half.page.up'), 'Scroll up')
+nmap_leader('oj', opencode_command('session.half.page.down'), 'Scroll down')

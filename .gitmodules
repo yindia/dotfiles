@@ -475,3 +475,6 @@
 [submodule "nvim/plugins/claudecode"]
 	path = nvim/plugins/claudecode
 	url = https://github.com/coder/claudecode.nvim.git
+[submodule "nvim/plugins/opencode"]
+	path = nvim/plugins/opencode
+	url = https://github.com/nickjvandyke/opencode.nvim.git
